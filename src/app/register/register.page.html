@@ -1,0 +1,29 @@
+<form (submit)="validador(); $event.preventDefault()">
+  <h1>¡Registrate!</h1>
+  <div>
+    <ion-item [ngClass]="{'shake': invalidFields['name']}">
+      <ion-input label="Nombre" [(ngModel)]="name" name="name" placeholder="Ingrese nombre"></ion-input>
+    </ion-item>
+
+    <ion-item [ngClass]="{'shake': invalidFields['email']}">
+      <ion-input label="Email" type="email" [(ngModel)]="email" name="email" placeholder="email@domain.com"></ion-input>
+    </ion-item>
+
+    <ion-item [ngClass]="{'shake': invalidFields['password']}">
+      <ion-input label="Contraseña" [(ngModel)]="password" name="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item [ngClass]="{'shake': invalidFields['password2']}">
+      <ion-input label="Confirmar contraseña" [(ngModel)]="password2" name="password2" type="password"></ion-input>
+    </ion-item>
+  </div>
+
+  <ion-button type="submit">Registrarse</ion-button>
+</form>
+
+<ion-toast
+    [isOpen]="isToastOpen"
+    message="Por favor complete los campos"
+    [duration]="3000"
+    (didDismiss)="isToastOpen = false"
+></ion-toast>

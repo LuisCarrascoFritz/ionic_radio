@@ -1,0 +1,27 @@
+<form (submit)="recover(); $event.preventDefault()">
+  <div>
+    <img src="../../assets/img/olvido-contrasena.png" alt="olvidar" class="img-olvide-contra">
+    <h1>Olvidaste tu contraseña, no te preocupes :3</h1>
+
+    <ion-item [ngClass]="{'shake': invalidFields['email']}">
+      <ion-input 
+        label="Inserte Email" 
+        type="email" 
+        placeholder="email@domain.com" 
+        [(ngModel)]="email" 
+        name="email">
+      </ion-input>
+    </ion-item>
+
+    <ion-button type="submit">Solicitar correo</ion-button>
+
+    <!-- Toast único reutilizado -->
+    <ion-toast
+      [isOpen]="isToastOpen"
+      [message]="toastMessage"
+      [duration]="3000"
+      (didDismiss)="isToastOpen = false">
+    </ion-toast>
+
+  </div>
+</form>

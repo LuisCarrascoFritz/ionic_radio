@@ -1,0 +1,43 @@
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    margin-top: 40%;
+
+    img {
+        max-width: 50%;
+        height: auto;
+    }
+}
+
+.version-info {
+    text-align: center;
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 16px;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 30px;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+}
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); } /* agranda */
+    100% { transform: scale(1); }  /* vuelve al tamaño normal */
+  }
+  
+  ion-item.pop {
+    animation: pop 0.3s ease;
+  }
+  
