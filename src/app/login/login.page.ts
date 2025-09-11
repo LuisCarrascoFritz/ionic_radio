@@ -27,15 +27,15 @@ export class LoginPage implements OnInit {
     console.log(this.email);
     console.log(this.password);
 
-    if (this.email === 'jesus.vargas@tinet.cl' && this.password === '123456') {
+    if (this.email === 'tester@gmail.com' && this.password === '123456') {
       this.router.navigateByUrl('/main');
     } else {
       this.isToastOpen = true;
-            // Activar animación
+            /* Activar animación */
             this.shakeInputs = true;
             this.isToastOpen = true;
       
-            // Quitar animación después de 300ms
+            /* Quitar animación después de 300ms */
             setTimeout(() => this.shakeInputs = false, 300);
     }
   }

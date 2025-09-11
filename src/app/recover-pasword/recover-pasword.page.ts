@@ -24,10 +24,10 @@
     
       if (!this.email) {
         this.invalidFields['email'] = true;
-        this.toastMessage = 'Por favor ingrese un email'; // ✅ mensaje de error
+        this.toastMessage = 'Por favor ingrese un email'; 
         this.isToastOpen = true;
       } else {
-        this.toastMessage = '¡Correo enviado correctamente!'; // mensaje de éxito
+        this.toastMessage = '¡Correo enviado correctamente!'; 
         this.isToastOpen = true;
         console.log('Email enviado a:', this.email);
       }
