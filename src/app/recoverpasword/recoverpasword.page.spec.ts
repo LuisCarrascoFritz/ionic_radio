@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RecoverPaswordPage } from './recover-pasword.page';
+import { RecoverPaswordPage } from './recoverpasword.page';
 
 describe('RecoverPaswordPage', () => {
   let component: RecoverPaswordPage;

@@ -4,9 +4,9 @@
   import { IonContent, IonHeader, IonTitle, IonToolbar,IonInput, IonItem, IonList,IonButton,IonToast } from '@ionic/angular/standalone';
 
   @Component({
-    selector: 'app-recover-pasword',
-    templateUrl: './recover-pasword.page.html',
-    styleUrls: ['./recover-pasword.page.scss'],
+    selector: 'app-recoverpasword',
+    templateUrl: './recoverpasword.page.html',
+    styleUrls: ['./recoverpasword.page.scss'],
     standalone: true,
     imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,IonInput, IonItem, IonList,IonButton, IonToast]
   })
