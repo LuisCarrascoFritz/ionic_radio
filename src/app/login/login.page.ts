@@ -30,38 +30,25 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-    
- 
     const emailTest = 'test@test.com';
     const passTest = '123';
-
     if (this.email === emailTest && this.password === passTest) {
-      console.log('¡MODO TESTEO ACTIVADO!');
-      
-
-      await this.authService.loginSuccess('test-fake-token-sqlite'); 
-      
+      await this.authService.loginSuccess('test-fake-token-sqlite');
       this.router.navigateByUrl('/main');
-      return; 
+      return;
     }
-
-
-    
-
-    console.log("Intentando login real con:", this.email);
     const datosUsuario = { email: this.email, password: this.password };
-
     try {
-
-      const respuestaApi = await this.authService.login(datosUsuario).toPromise(); 
-      console.log('¡Login real exitoso!', respuestaApi);
-      
-      await this.authService.loginSuccess(respuestaApi.token); 
-      this.router.navigateByUrl('/main');
-
-    } catch (error) {
-      console.error('Error en el login real', error);
-
+      const usuarioEncontrado = await this.authService.login(datosUsuario);
+      if (usuarioEncontrado === true) {
+        await this.authService.loginSuccess(datosUsuario.email);
+        this.router.navigateByUrl('/main');
+      } else {
+        this.isToastOpen = true;
+        this.shakeInputs = true;
+        setTimeout(() => this.shakeInputs = false, 300);
+      }
+    } catch (_) {
       this.isToastOpen = true;
       this.shakeInputs = true;
       setTimeout(() => this.shakeInputs = false, 300);

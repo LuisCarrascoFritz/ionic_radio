@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { DatabaseService } from './services/database'; // <-- 1. IMPORTA
+import { DatabaseService } from './services/database';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +9,9 @@ import { DatabaseService } from './services/database'; // <-- 1. IMPORTA
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-
-  // 2. INYECTA EL SERVICIO
   constructor(private databaseService: DatabaseService) {
-    this.inicializarBD(); // <-- 3. LLAMA AL MÉTODO
+    this.inicializarBD();
   }
-
-  // 4. CREA EL MÉTODO (como en tu PDF 1)
   async inicializarBD() {
     await this.databaseService.crearBD();
   }

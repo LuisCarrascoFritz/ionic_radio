@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar,IonInput, IonItem, IonList,IonButton,IonToast } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-register',
@@ -17,18 +19,14 @@ export class RegisterPage implements OnInit {
   password2: string = '';
   isToastOpen: boolean = false;
 
-  // Campos inválidos
   invalidFields: { [key: string]: boolean } = {};
 
-  constructor() { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {}
 
   validador() {
-    // Resetear estados
     this.invalidFields = {};
-
-    // Validar cada campo
     if (!this.name) this.invalidFields['name'] = true;
     if (!this.email) this.invalidFields['email'] = true;
     if (!this.password) this.invalidFields['password'] = true;
@@ -37,7 +35,18 @@ export class RegisterPage implements OnInit {
     if (Object.keys(this.invalidFields).length > 0) {
       this.isToastOpen = true;
     } else {
-      alert('¡Registro exitoso!');
+      this.register();
+    }
+  }
+
+  async register() {
+    const datosUsuario = { email: this.email, password: this.password };
+    const exito = await this.authService.register(datosUsuario);
+    if (exito === true) {
+      alert('Usuario Creado');
+      this.router.navigateByUrl('/login');
+    } else {
+      alert('Error: El email ya está en uso');
     }
   }
 }

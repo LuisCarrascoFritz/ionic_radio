@@ -26,7 +26,9 @@ export class DatabaseService {
         'CREATE TABLE IF NOT EXISTS sesion (token TEXT)', []
       );
       console.log("Tabla 'sesion' creada");
-
+      await this.db.executeSql(
+        'CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, password TEXT)', []
+      );
     } catch (e) {
       console.error("Ocurrió un error al crear la base de datos", e);
     }
@@ -65,6 +67,28 @@ export class DatabaseService {
       console.log('Token borrado de SQLite');
     } catch (e) {
       console.error('Error al borrar token en SQLite', e);
+    }
+  }
+
+  async crearUsuario(email: string, password: string): Promise<boolean> {
+    if (!this.db) return false;
+    try {
+      const existing = await this.db.executeSql('SELECT * FROM usuarios WHERE email = ?', [email]);
+      if (existing.rows.length > 0) return false;
+      await this.db.executeSql('INSERT INTO usuarios (email, password) VALUES (?, ?)', [email, password]);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async buscarUsuario(email: string, password: string): Promise<boolean> {
+    if (!this.db) return false;
+    try {
+      const result = await this.db.executeSql('SELECT * FROM usuarios WHERE email = ? AND password = ?', [email, password]);
+      return result.rows.length > 0;
+    } catch (e) {
+      return false;
     }
   }
 }

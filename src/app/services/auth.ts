@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { DatabaseService } from './database'; // 1. IMPORTA EL DB SERVICE
+import { DatabaseService } from './database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  apiURL = 'https://tu-servidor-de-streaming.com/api';
-  httpOptions = { /* ... */ };
+  apiURL = 'https://api.mi-radio-app.com/api';
+  httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
   constructor(
     private http: HttpClient, 
@@ -18,8 +18,12 @@ export class AuthService {
     private dbService: DatabaseService 
   ) { }
 
-  login(datosUsuario: any): Observable<any> {
-    return this.http.post(this.apiURL + '/login', datosUsuario, this.httpOptions);
+  async register(datosUsuario: any): Promise<boolean> {
+    return await this.dbService.crearUsuario(datosUsuario.email, datosUsuario.password);
+  }
+
+  async login(datosUsuario: any): Promise<boolean> {
+    return await this.dbService.buscarUsuario(datosUsuario.email, datosUsuario.password);
   }
 
 
