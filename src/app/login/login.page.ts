@@ -4,12 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { IonToast, IonItem, IonButton, IonInputPasswordToggle, IonInput } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 
+
+import { AuthService } from '../services/auth'; 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonItem, IonButton, IonInput, IonInputPasswordToggle, IonToast,RouterModule]
+  imports: [CommonModule, FormsModule, IonItem, IonButton, IonInput, IonInputPasswordToggle, IonToast, RouterModule]
 })
 export class LoginPage implements OnInit {
 
@@ -18,31 +21,58 @@ export class LoginPage implements OnInit {
   isToastOpen: boolean = false;
   shakeInputs: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService 
+  ) { }
 
   ngOnInit() {
   }
 
-  login() {
-    console.log(this.email);
-    console.log(this.password);
+  async login() {
+    
+ 
+    const emailTest = 'test@test.com';
+    const passTest = '123';
 
-    if (this.email === 'tester@gmail.com' && this.password === '123456') {
-      this.router.navigateByUrl('/main');
-    } else {
-      this.isToastOpen = true;
-            /* Activar animación */
-            this.shakeInputs = true;
-            this.isToastOpen = true;
+    if (this.email === emailTest && this.password === passTest) {
+      console.log('¡MODO TESTEO ACTIVADO!');
       
-            /* Quitar animación después de 300ms */
-            setTimeout(() => this.shakeInputs = false, 300);
+
+      await this.authService.loginSuccess('test-fake-token-sqlite'); 
+      
+      this.router.navigateByUrl('/main');
+      return; 
+    }
+
+
+    
+
+    console.log("Intentando login real con:", this.email);
+    const datosUsuario = { email: this.email, password: this.password };
+
+    try {
+
+      const respuestaApi = await this.authService.login(datosUsuario).toPromise(); 
+      console.log('¡Login real exitoso!', respuestaApi);
+      
+      await this.authService.loginSuccess(respuestaApi.token); 
+      this.router.navigateByUrl('/main');
+
+    } catch (error) {
+      console.error('Error en el login real', error);
+
+      this.isToastOpen = true;
+      this.shakeInputs = true;
+      setTimeout(() => this.shakeInputs = false, 300);
     }
   }
+
   register() {
     this.router.navigateByUrl('/register');
   }
+
   recover() {
-  this.router.navigateByUrl('/recoverpasword');
+    this.router.navigateByUrl('/recoverpasword');
   }
-    }
+}
