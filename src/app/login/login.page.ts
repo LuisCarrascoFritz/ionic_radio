@@ -3,56 +3,57 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonToast, IonItem, IonButton, IonInputPasswordToggle, IonInput } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
-
-
-import { AuthService } from '../services/auth'; 
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonItem, IonButton, IonInput, IonInputPasswordToggle, IonToast, RouterModule]
+  imports: [CommonModule, FormsModule, IonItem, IonButton, IonInput, IonInputPasswordToggle, IonToast, RouterModule],
 })
 export class LoginPage implements OnInit {
 
-  email: string = '';
-  password: string = '';
-  isToastOpen: boolean = false;
-  shakeInputs: boolean = false;
+  email = '';
+  password = '';
+  isToastOpen = false;
+  shakeInputs = false;
 
   constructor(
     private router: Router,
-    private authService: AuthService 
-  ) { }
+    private authService: AuthService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async login() {
-    const emailTest = 'test@test.com';
-    const passTest = '123';
-    if (this.email === emailTest && this.password === passTest) {
-      await this.authService.loginSuccess('test-fake-token-sqlite');
+    console.log('🔑 Iniciando sesión con:', this.email);
+
+    // Usuario de prueba (opcional)
+    if (this.email === 'test@test.com' && this.password === '123') {
+      await this.authService.loginSuccess('test-fake-token');
       this.router.navigateByUrl('/main');
       return;
     }
-    const datosUsuario = { email: this.email, password: this.password };
+
     try {
-      const usuarioEncontrado = await this.authService.login(datosUsuario);
-      if (usuarioEncontrado === true) {
-        await this.authService.loginSuccess(datosUsuario.email);
+      const ok = await this.authService.login({ email: this.email, password: this.password });
+      if (ok) {
+        await this.authService.loginSuccess(this.email);
         this.router.navigateByUrl('/main');
       } else {
-        this.isToastOpen = true;
-        this.shakeInputs = true;
-        setTimeout(() => this.shakeInputs = false, 300);
+        this.mostrarError();
       }
-    } catch (_) {
-      this.isToastOpen = true;
-      this.shakeInputs = true;
-      setTimeout(() => this.shakeInputs = false, 300);
+    } catch (error) {
+      console.error('❌ Error al iniciar sesión:', error);
+      this.mostrarError();
     }
+  }
+
+  mostrarError() {
+    this.isToastOpen = true;
+    this.shakeInputs = true;
+    setTimeout(() => (this.shakeInputs = false), 300);
   }
 
   register() {

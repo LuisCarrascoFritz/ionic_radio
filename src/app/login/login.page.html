@@ -3,35 +3,51 @@
     <img src="../../assets/img/Tuniq Logo.png" alt="Logo" class="logo-img" />
   </div>
 
-  <form (submit)="login()">
-    <div>
-      <ion-item [ngClass]="{'pop': shakeInputs}">
-        <ion-input label="Email input" type="email" [(ngModel)]="email" name="email" placeholder="email@domain.com"></ion-input>
-      </ion-item>
-      
-      <ion-item class="ion-margin-top" [ngClass]="{'pop': shakeInputs}">
-        <ion-input type="password" label="Password" [(ngModel)]="password" name="password">
-          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-        </ion-input>
-      </ion-item>      
-    </div>
+  <!-- ✅ Usa (ngSubmit) para que Angular controle el envío -->
+  <form (ngSubmit)="login()" #loginForm="ngForm">
+    <ion-item [ngClass]="{'pop': shakeInputs}">
+      <ion-input
+        label="Email"
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="email@domain.com"
+        required>
+      </ion-input>
+    </ion-item>
 
-    <ion-button expand="block" type="submit">Iniciar sesión</ion-button>
+    <ion-item class="ion-margin-top" [ngClass]="{'pop': shakeInputs}">
+      <ion-input
+        type="password"
+        label="Password"
+        [(ngModel)]="password"
+        name="password"
+        required>
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="!loginForm.form.valid">
+      Iniciar sesión
+    </ion-button>
   </form>
-  <form (submit)="register()">
-    <ion-button expand="block" type="submit">Registrarse</ion-button>
-  </form>
+
+  <!-- 🔹 Botón de registro -->
+  <ion-button expand="block" fill="outline" (click)="register()">
+    Registrarse
+  </ion-button>
+
   <a routerLink="/recoverpasword">Recuperar contraseña</a>
+
   <div class="version-info">
-    <span>
-      Versión 1.2.0
-    </span>
+    <span>Versión 1.2.0</span>
   </div>
 </div>
 
+<!-- 🔹 Toast para errores -->
 <ion-toast
-    [isOpen]="isToastOpen"
-    message="Credenciales incorrectas"
-    [duration]="5000"
-    (didDismiss)="isToastOpen = false"
-  ></ion-toast>
+  [isOpen]="isToastOpen"
+  message="Credenciales incorrectas"
+  [duration]="4000"
+  (didDismiss)="isToastOpen = false">
+</ion-toast>
