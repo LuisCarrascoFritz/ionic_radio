@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar,IonInput, IonItem, IonList,IonButton,IonToast } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth';
 
 @Component({
@@ -10,43 +9,78 @@ import { AuthService } from '../services/auth';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,IonInput, IonItem, IonList,IonButton,IonToast]
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class RegisterPage implements OnInit {
-  name: string = '';
+
   email: string = '';
   password: string = '';
-  password2: string = '';
+  confirmPassword: string = '';
   isToastOpen: boolean = false;
+  toastMessage: string = '';
+  shakeInputs: boolean = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
-  invalidFields: { [key: string]: boolean } = {};
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
-  constructor(private router: Router, private authService: AuthService) { }
+  ngOnInit() {
+  }
 
-  ngOnInit() {}
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
-  validador() {
-    this.invalidFields = {};
-    if (!this.name) this.invalidFields['name'] = true;
-    if (!this.email) this.invalidFields['email'] = true;
-    if (!this.password) this.invalidFields['password'] = true;
-    if (!this.password2) this.invalidFields['password2'] = true;
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
-    if (Object.keys(this.invalidFields).length > 0) {
-      this.isToastOpen = true;
-    } else {
-      this.register();
+  async register(event?: Event) {
+    if (event) event.preventDefault();
+
+    if (!this.email || !this.password || !this.confirmPassword) {
+      this.triggerError('Todos los campos son requeridos');
+      return;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.triggerError('Las contraseñas no coinciden');
+      return;
+    }
+
+    const datosUsuario = { email: this.email, password: this.password };
+    
+    try {
+      const success = await this.authService.register(datosUsuario);
+      
+      if (success) {
+        this.toastMessage = 'Usuario registrado exitosamente';
+        this.isToastOpen = true;
+        setTimeout(() => {
+          this.isToastOpen = false;
+          this.router.navigateByUrl('/login');
+        }, 2000);
+      } else {
+        this.triggerError('El usuario ya existe');
+      }
+    } catch (_) {
+      this.triggerError('Error al registrar usuario');
     }
   }
 
-  async register() {
-    const datosUsuario = { email: this.email, password: this.password };
-    const exito = await this.authService.register(datosUsuario);
-    if (exito === true) {
-      alert('Usuario Creado');
-      this.router.navigateByUrl('/login');
-    } else {
-      alert('Error: El email ya está en uso');
-    }
+  triggerError(message: string) {
+    this.toastMessage = message;
+    this.isToastOpen = true;
+    this.shakeInputs = true;
+    
+    setTimeout(() => this.shakeInputs = false, 500);
+    setTimeout(() => this.isToastOpen = false, 3000);
+  }
+
+  goToLogin() {
+    this.router.navigateByUrl('/login');
   }
 }

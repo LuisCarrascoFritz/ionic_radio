@@ -1,26 +1,51 @@
-<form (submit)="recover(); $event.preventDefault()">
-  <div>
-    <img src="../../assets/img/olvido-contrasena.png" alt="olvidar" class="img-olvide-contra">
-    <h1>Olvidaste tu contraseña, no te preocupes :3</h1>
+<div class="login-container">
+  <div class="login-card">
+    
+    <!-- Icono de Recuperación -->
+    <div class="recover-icon">
+      <svg viewBox="0 0 100 100" width="120" height="120">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" stroke-width="2" stroke-dasharray="5,5"/>
+        <path d="M35 40 L35 35 Q35 20 50 20 Q65 20 65 35 L65 40" fill="none" stroke="white" stroke-width="4"/>
+        <rect x="25" y="40" width="50" height="35" rx="5" fill="#ff3333"/>
+        <text x="50" y="65" text-anchor="middle" fill="white" font-size="20" font-weight="bold">?</text>
+      </svg>
+    </div>
 
-    <ion-item [ngClass]="{'shake': invalidFields['email']}">
-      <ion-input 
-        label="Inserte Email" 
-        type="email" 
-        placeholder="email@domain.com" 
-        [(ngModel)]="email" 
-        name="email">
-      </ion-input>
-    </ion-item>
+    <h1 class="login-title">¿Olvidaste tu contraseña?</h1>
+    <p class="subtitle">No te preocupes, te ayudaremos</p>
+    
+    <form (submit)="recover($event)" class="form-container">
+      <div class="input-group">
+        
+        <!-- Email -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              class="form-control" 
+              placeholder=" " 
+              required
+              autocomplete="email">
+            <label class="floating-label">Correo electrónico</label>
+          </div>
+        </div>
 
-    <ion-button type="submit">Solicitar correo</ion-button>
+      </div>
 
-    <ion-toast
-      [isOpen]="isToastOpen"
-      [message]="toastMessage"
-      [duration]="3000"
-      (didDismiss)="isToastOpen = false">
-    </ion-toast>
+      <button type="submit" class="btn-primary">Enviar instrucciones</button>
+    </form>
 
+    <button class="btn-secondary" (click)="goToLogin()">Volver al login</button>
+
+    <div class="version-info">
+      <span>Versión 1.2.0</span>
+    </div>
   </div>
-</form>
+
+  <!-- Toast Personalizado -->
+  <div class="custom-toast" [class.show]="isToastOpen">
+    {{ toastMessage }}
+  </div>
+</div>

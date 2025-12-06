@@ -1,29 +1,76 @@
-<form (submit)="validador(); $event.preventDefault()">
-  <h1>¡Registrate!</h1>
-  <div>
-    <ion-item [ngClass]="{'shake': invalidFields['name']}">
-      <ion-input label="Nombre" [(ngModel)]="name" name="name" placeholder="Ingrese nombre"></ion-input>
-    </ion-item>
+<div class="login-container">
+  <div class="login-card fade-in">
+    
+    <h1 class="section-title">¡Regístrate!</h1>
+    
+    <form (submit)="register($event)" class="form-container">
+      <div class="input-group">
 
-    <ion-item [ngClass]="{'shake': invalidFields['email']}">
-      <ion-input label="Email" type="email" [(ngModel)]="email" name="email" placeholder="email@domain.com"></ion-input>
-    </ion-item>
+        <!-- Email -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              class="form-control" 
+              placeholder=" " 
+              required
+              autocomplete="email">
+            <label class="floating-label">Email</label>
+          </div>
+        </div>
 
-    <ion-item [ngClass]="{'shake': invalidFields['password']}">
-      <ion-input label="Contraseña" [(ngModel)]="password" name="password" type="password"></ion-input>
-    </ion-item>
+        <!-- Password -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              [(ngModel)]="password" 
+              name="password" 
+              class="form-control" 
+              placeholder=" " 
+              required
+              autocomplete="new-password">
+            <label class="floating-label">Contraseña</label>
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              {{ showPassword ? '👁️' : '🔒' }}
+            </button>
+          </div>
+        </div>
 
-    <ion-item [ngClass]="{'shake': invalidFields['password2']}">
-      <ion-input label="Confirmar contraseña" [(ngModel)]="password2" name="password2" type="password"></ion-input>
-    </ion-item>
+        <!-- Confirm Password -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              [(ngModel)]="confirmPassword" 
+              name="confirmPassword" 
+              class="form-control" 
+              placeholder=" " 
+              required
+              autocomplete="new-password">
+            <label class="floating-label">Confirmar contraseña</label>
+            <button type="button" class="password-toggle" (click)="toggleConfirmPassword()">
+              {{ showConfirmPassword ? '👁️' : '🔒' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn-primary">Registrarse</button>
+    </form>
+
+    <button class="btn-secondary" (click)="goToLogin()">Volver al Login</button>
+
+    <div class="version-info">
+      <span>Versión 1.2.0</span>
+    </div>
   </div>
 
-  <ion-button type="submit">Registrarse</ion-button>
-</form>
-
-<ion-toast
-    [isOpen]="isToastOpen"
-    message="Por favor complete los campos"
-    [duration]="3000"
-    (didDismiss)="isToastOpen = false"
-></ion-toast>
+  <!-- Toast Personalizado -->
+  <div class="custom-toast" [class.show]="isToastOpen">
+    {{ toastMessage }}
+  </div>
+</div>

@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonToast, IonItem, IonButton, IonInputPasswordToggle, IonInput } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 
-
-import { AuthService } from '../services/auth'; 
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonItem, IonButton, IonInput, IonInputPasswordToggle, IonToast, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class LoginPage implements OnInit {
 
@@ -20,39 +18,54 @@ export class LoginPage implements OnInit {
   password: string = '';
   isToastOpen: boolean = false;
   shakeInputs: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private router: Router,
-    private authService: AuthService 
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
   }
 
-  async login() {
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  async login(event?: Event) {
+    if (event) event.preventDefault();
+
     const emailTest = 'test@test.com';
     const passTest = '123';
+    
     if (this.email === emailTest && this.password === passTest) {
       await this.authService.loginSuccess('test-fake-token-sqlite');
       this.router.navigateByUrl('/main');
       return;
     }
+
     const datosUsuario = { email: this.email, password: this.password };
+    
     try {
       const usuarioEncontrado = await this.authService.login(datosUsuario);
+      
       if (usuarioEncontrado === true) {
         await this.authService.loginSuccess(datosUsuario.email);
         this.router.navigateByUrl('/main');
       } else {
-        this.isToastOpen = true;
-        this.shakeInputs = true;
-        setTimeout(() => this.shakeInputs = false, 300);
+        this.triggerError();
       }
     } catch (_) {
-      this.isToastOpen = true;
-      this.shakeInputs = true;
-      setTimeout(() => this.shakeInputs = false, 300);
+      this.triggerError();
     }
+  }
+
+  triggerError() {
+    this.isToastOpen = true;
+    this.shakeInputs = true;
+    
+    setTimeout(() => this.shakeInputs = false, 500);
+    setTimeout(() => this.isToastOpen = false, 3000);
   }
 
   register() {

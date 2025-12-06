@@ -1,37 +1,79 @@
 <div class="login-container">
-  <div class="logo-container">
-    <img src="../../assets/img/Tuniq Logo.png" alt="Logo" class="logo-img" />
-  </div>
-
-  <form (submit)="login()">
-    <div>
-      <ion-item [ngClass]="{'pop': shakeInputs}">
-        <ion-input label="Email input" type="email" [(ngModel)]="email" name="email" placeholder="email@domain.com"></ion-input>
-      </ion-item>
-      
-      <ion-item class="ion-margin-top" [ngClass]="{'pop': shakeInputs}">
-        <ion-input type="password" label="Password" [(ngModel)]="password" name="password">
-          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-        </ion-input>
-      </ion-item>      
+  <div class="login-card">
+    
+    <div class="logo-container">
+      <!-- Logo SVG Animado -->
+      <svg viewBox="0 0 200 180" class="logo-svg" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="45">Tuniq</text>
+        <g transform="translate(100, 110)">
+          <path d="M-50 -20 Q-60 0 -50 20" stroke="#ff3333" stroke-width="5" fill="none" />
+          <path d="M-35 -15 Q-45 0 -35 15" stroke="#ff3333" stroke-width="5" fill="none" />
+          <circle cx="0" cy="0" r="25" stroke="#ff3333" stroke-width="8" fill="transparent" />
+          <path d="M10 10 L25 25" stroke="#ff3333" stroke-width="8" stroke-linecap="round" />
+          <path d="M35 -15 Q45 0 35 15" stroke="#ff3333" stroke-width="5" fill="none" />
+          <path d="M50 -20 Q60 0 50 20" stroke="#ff3333" stroke-width="5" fill="none" />
+        </g>
+      </svg>
     </div>
 
-    <ion-button expand="block" type="submit">Iniciar sesión</ion-button>
-  </form>
-  <form (submit)="register()">
-    <ion-button expand="block" type="submit">Registrarse</ion-button>
-  </form>
-  <a routerLink="/recoverpasword">Recuperar contraseña</a>
-  <div class="version-info">
-    <span>
-      Versión 1.2.0
-    </span>
+    <h2 class="login-title">Bienvenido</h2>
+
+    <form (submit)="login($event)" class="form-container">
+      <div class="input-group">
+        
+        <!-- Email Input -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              class="form-control" 
+              placeholder=" " 
+              required>
+            <label class="floating-label">Correo electrónico</label>
+          </div>
+        </div>
+        
+        <!-- Password Input -->
+        <div class="custom-input-item" [ngClass]="{'pop': shakeInputs}">
+          <div class="floating-label-group">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              [(ngModel)]="password" 
+              name="password" 
+              class="form-control" 
+              placeholder=" " 
+              required>
+            <label class="floating-label">Contraseña</label>
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+               {{ showPassword ? '👁️' : '🔒' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <button class="btn-secondary" (click)="register()">
+      Crear cuenta
+    </button>
+
+    <a (click)="recover()" class="recover-link">
+      ¿Olvidaste tu contraseña?
+    </a>
+
+    <div class="version-info">
+      <span>Versión 1.2.0</span>
+    </div>
   </div>
 </div>
 
-<ion-toast
-    [isOpen]="isToastOpen"
-    message="Credenciales incorrectas"
-    [duration]="5000"
-    (didDismiss)="isToastOpen = false"
-  ></ion-toast>
+<!-- Toast Personalizado -->
+<div class="custom-toast" [class.show]="isToastOpen">
+  Credenciales incorrectas
+</div>
