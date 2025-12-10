@@ -1,0 +1,118 @@
+.radio-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  margin: 0 0 20px 0;
+  background: linear-gradient(180deg, #1c1c1e 0%, #000000 100%);
+  border-radius: 20px;
+  border: 1px solid #333;
+  color: #555;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.custom-btn {
+  margin-top: 16px;
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  --box-shadow: 0 4px 12px rgba(250, 35, 59, 0.3);
+}
+
+.btn-primary {
+  --background: var(--app-accent-gradient);
+}
+
+.btn-secondary {
+  --background: #2c2c2e;
+  --color: #fff;
+  --box-shadow: none;
+}
+
+.video-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.video-placeholder {
+  background: #222;
+  height: 200px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  ion-icon {
+    font-size: 40px;
+  }
+
+  span {
+    margin-left: 10px;
+  }
+}
+
+.radio-page-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.radio-cover {
+  width: 240px;
+  height: 240px;
+  background: linear-gradient(135deg, #2c2c2e, #1c1c1e);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  margin-bottom: 32px;
+  border: 1px solid #333;
+
+  ion-icon {
+    font-size: 80px;
+    color: #555;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--app-text-primary);
+}
+
+p {
+  color: var(--app-text-secondary);
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.play-btn-large {
+  width: 72px;
+  height: 72px;
+  --border-radius: 50%;
+  --background: var(--app-accent-gradient);
+  margin-top: 24px;
+  box-shadow: 0 10px 20px rgba(250, 35, 59, 0.4);
+
+  ion-icon {
+    margin-left: 4px;
+    font-size: 32px;
+  }
+}

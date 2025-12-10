@@ -1,7 +1,7 @@
 {
-  "name": "ionic-app",
+  "name": "ionic_radio",
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular-standalone"
+  "type": "angular"
 }

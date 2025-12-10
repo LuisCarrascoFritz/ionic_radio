@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Search</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Busca una canción..." 
+      (ionInput)="onSearch($event)"
+      [debounce]="500"
+      animated="true"
+      showClearButton="always">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="isSearching" style="text-align: center; padding: 20px;">
+    <ion-spinner></ion-spinner>
+    <p>Buscando...</p>
+  </div>
+
+  <ion-list *ngIf="!isSearching && searchResults.length > 0">
+    <ion-item *ngFor="let result of searchResults" button>
+      <ion-thumbnail slot="start">
+        <img [src]="result.thumbnail" [alt]="result.title" (error)="onImageError($event)" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ result.title }}</h2>
+        <p>{{ result.artist }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="!isSearching && searchQuery && searchResults.length === 0" style="text-align: center; padding: 20px; color: #999;">
+    <ion-icon name="search-outline" style="font-size: 48px;"></ion-icon>
+    <p>No se encontraron resultados para "{{ searchQuery }}"</p>
+  </div>
+
+  <div *ngIf="!isSearching && !searchQuery" style="text-align: center; padding: 20px; color: #999;">
+    <ion-icon name="musical-notes-outline" style="font-size: 48px;"></ion-icon>
+    <p>Escribe para buscar canciones, artistas o álbumes</p>
+  </div>
+</ion-content>

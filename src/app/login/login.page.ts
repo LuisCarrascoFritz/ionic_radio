@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 
 @Component({
@@ -10,69 +9,93 @@ import { AuthService } from '../services/auth';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule]
 })
 export class LoginPage implements OnInit {
-
   email: string = '';
   password: string = '';
-  isToastOpen: boolean = false;
-  shakeInputs: boolean = false;
   showPassword: boolean = false;
+  shakeInputs: boolean = false;
+  isToastOpen: boolean = false;
+  toastMessage: string = '';
 
   constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  async login(event?: Event) {
-    if (event) event.preventDefault();
+  async login(event: Event) {
+    event.preventDefault();
 
-    const emailTest = 'test@test.com';
-    const passTest = '123';
-    
-    if (this.email === emailTest && this.password === passTest) {
-      await this.authService.loginSuccess('test-fake-token-sqlite');
-      this.router.navigateByUrl('/main');
+    if (!this.email || !this.password) {
+      this.mostrarToast('Por favor completa todos los campos');
+      this.shakeInputs = true;
+      setTimeout(() => this.shakeInputs = false, 500);
       return;
     }
 
-    const datosUsuario = { email: this.email, password: this.password };
-    
     try {
-      const usuarioEncontrado = await this.authService.login(datosUsuario);
+      // El login retorna boolean, no un objeto usuario
+      const loginExitoso = await this.authService.login(this.email, this.password);
       
-      if (usuarioEncontrado === true) {
-        await this.authService.loginSuccess(datosUsuario.email);
-        this.router.navigateByUrl('/main');
+      if (loginExitoso) {
+        console.log('✅ Login exitoso');
+        // El authService ya guardó el usuario internamente
+        await this.router.navigate(['/main/home'], { replaceUrl: true });
       } else {
-        this.triggerError();
+        console.log('❌ Credenciales inválidas');
+        this.mostrarToast('Credenciales inválidas');
+        this.shakeInputs = true;
+        setTimeout(() => this.shakeInputs = false, 500);
       }
-    } catch (_) {
-      this.triggerError();
+    } catch (error) {
+      console.error('❌ Error durante el login:', error);
+      this.mostrarToast('Error al intentar iniciar sesión');
+      this.shakeInputs = true;
+      setTimeout(() => this.shakeInputs = false, 500);
     }
   }
 
-  triggerError() {
-    this.isToastOpen = true;
-    this.shakeInputs = true;
-    
-    setTimeout(() => this.shakeInputs = false, 500);
-    setTimeout(() => this.isToastOpen = false, 3000);
-  }
-
   register() {
-    this.router.navigateByUrl('/register');
+    this.router.navigate(['/register']);
   }
 
   recover() {
-    this.router.navigateByUrl('/recoverpasword');
+    this.router.navigate(['/recoverpasword']);
+  }
+
+  async iniciarConDemo() {
+    try {
+      // Para demo, solo guardamos directamente
+      const usuarioDemo = {
+        id: 1,
+        username: 'demo',
+        email: 'demo@demo.com',
+        created_at: new Date().toISOString()
+      };
+      
+      // Guardar en localStorage
+      localStorage.setItem('currentUser', JSON.stringify(usuarioDemo));
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      await this.router.navigate(['/main/home'], { replaceUrl: true });
+    } catch (error) {
+      console.error('❌ Error con demo:', error);
+      this.mostrarToast('Error al iniciar con demo');
+    }
+  }
+
+  mostrarToast(mensaje: string) {
+    this.toastMessage = mensaje;
+    this.isToastOpen = true;
+    setTimeout(() => {
+      this.isToastOpen = false;
+    }, 3000);
   }
 }

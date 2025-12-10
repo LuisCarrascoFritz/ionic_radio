@@ -1,19 +1,9 @@
-// --- Al principio, en los imports ---
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
-import { 
-  IonTabs, IonTab, IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonTabBar, IonTabButton, IonIcon, IonButton,
-  IonSearchbar, IonList, IonItem, IonLabel, IonThumbnail
-} from '@ionic/angular/standalone';
-import { ModalController } from '@ionic/angular';
-import { StreamViewPage } from '../pages/stream-view/stream-view.page';
-
-import { MusicService } from '../services/music';
-
+import { FormsModule } from '@angular/forms';
+import { IonContent, IonRouterOutlet, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { library, playCircle, radio, search } from 'ionicons/icons';
+import { playCircle, radio, library, search } from 'ionicons/icons';
 
 @Component({
   selector: 'app-main',
@@ -21,51 +11,20 @@ import { library, playCircle, radio, search } from 'ionicons/icons';
   styleUrls: ['./main.page.scss'],
   standalone: true,
   imports: [
+    IonContent,
+    IonRouterOutlet,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonIcon,
+    IonLabel,
     CommonModule,
-    FormsModule,
-    IonTabs, IonTab, IonHeader, IonToolbar, IonTitle, IonContent, 
-    IonTabBar, IonTabButton, IonIcon, IonButton,
-    IonSearchbar, IonList, IonItem, IonLabel, IonThumbnail
+    FormsModule
   ]
 })
 export class MainPage {
-
-  private currentStream: MediaStream | null = null;
-  public searchResults: any[] = []; 
-  constructor(
-    private musicService: MusicService,
-    private modalCtrl: ModalController
-  ) {
-    addIcons({ library, playCircle, radio, search });
+  constructor() {
+    addIcons({ playCircle, radio, library, search });
+    console.log('MainPage constructor - Tabs inicializadas');
   }
-
-  async iniciarStream() {
-    const modal = await this.modalCtrl.create({ component: StreamViewPage, componentProps: { streamType: 'video' } });
-    await modal.present();
-  }
-
-  handleSearch(event: any) {
-    const searchTerm = event.detail.value;
-
-    if (searchTerm && searchTerm.trim() !== '') {
-      this.musicService.searchTracks(searchTerm).subscribe(
-        (data: any) => {
-          this.searchResults = data.results.trackmatches.track;
-          console.log(this.searchResults);
-        },
-        (error: any) => {
-          console.error('Error al buscar en Last.fm', error);
-          this.searchResults = [];
-        }
-      );
-    } else {
-      this.searchResults = [];
-    }
-  }
-
-  async iniciarSoloAudio() {
-    const modal = await this.modalCtrl.create({ component: StreamViewPage, componentProps: { streamType: 'audio' } });
-    await modal.present();
-  }
-  
 }

@@ -1,4 +1,25 @@
 ion-tab-button.selected {
     color: var(--ion-color-primary);
-  }
+}
+
+ion-tabs {
+  position: relative;
   
+  ion-tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+}
+
+// Asegurar que el contenido no esté bloqueado
+ion-content {
+  --padding-bottom: 56px; // altura del tab-bar
+  pointer-events: auto !important;
+  
+  * {
+    pointer-events: auto !important;
+  }
+}

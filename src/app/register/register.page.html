@@ -3,7 +3,7 @@
     
     <h1 class="section-title">¡Regístrate!</h1>
     
-    <form (submit)="register($event)" class="form-container">
+    <form (submit)="onRegister(); $event.preventDefault()" class="form-container">
       <div class="input-group">
 
         <!-- Email -->

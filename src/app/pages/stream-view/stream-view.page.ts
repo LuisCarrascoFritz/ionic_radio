@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/angular/standalone';
 import { ModalController, NavParams } from '@ionic/angular';
 
 @Component({
@@ -8,7 +8,7 @@ import { ModalController, NavParams } from '@ionic/angular';
   templateUrl: './stream-view.page.html',
   styleUrls: ['./stream-view.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent]
+  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent]
 })
 export class StreamViewPage implements OnInit {
   @Input() streamType: 'video' | 'audio' = 'video';

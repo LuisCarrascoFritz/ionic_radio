@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 
 @Component({
@@ -9,25 +9,66 @@ import { AuthService } from '../services/auth';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [
+    CommonModule, 
+    FormsModule
+  ]
 })
-export class RegisterPage implements OnInit {
-
+export class RegisterPage {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  isToastOpen: boolean = false;
-  toastMessage: string = '';
-  shakeInputs: boolean = false;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  shakeInputs: boolean = false;
+  isToastOpen: boolean = false;
+  toastMessage: string = '';
 
   constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
+  async onRegister() {
+    if (!this.email || !this.password || !this.confirmPassword) {
+      this.showToast('Por favor completa todos los campos');
+      this.triggerShake();
+      return;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.showToast('Las contraseñas no coinciden');
+      this.triggerShake();
+      return;
+    }
+
+    if (this.password.length < 4) {
+      this.showToast('La contraseña debe tener al menos 4 caracteres');
+      this.triggerShake();
+      return;
+    }
+
+    const datosUsuario = {
+      username: this.email.split('@')[0],
+      email: this.email,
+      password: this.password
+    };
+
+    console.log('Intentando registrar usuario:', datosUsuario.email);
+
+    const success = await this.authService.register(datosUsuario);
+
+    if (success) {
+      this.showToast('¡Registro exitoso!');
+      console.log('Registro exitoso, redirigiendo a login');
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 1500);
+    } else {
+      this.showToast('Error: El usuario ya existe');
+      console.log('Error en el registro - Usuario ya existe');
+      this.triggerShake();
+    }
   }
 
   togglePassword() {
@@ -38,49 +79,22 @@ export class RegisterPage implements OnInit {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  async register(event?: Event) {
-    if (event) event.preventDefault();
-
-    if (!this.email || !this.password || !this.confirmPassword) {
-      this.triggerError('Todos los campos son requeridos');
-      return;
-    }
-
-    if (this.password !== this.confirmPassword) {
-      this.triggerError('Las contraseñas no coinciden');
-      return;
-    }
-
-    const datosUsuario = { email: this.email, password: this.password };
-    
-    try {
-      const success = await this.authService.register(datosUsuario);
-      
-      if (success) {
-        this.toastMessage = 'Usuario registrado exitosamente';
-        this.isToastOpen = true;
-        setTimeout(() => {
-          this.isToastOpen = false;
-          this.router.navigateByUrl('/login');
-        }, 2000);
-      } else {
-        this.triggerError('El usuario ya existe');
-      }
-    } catch (_) {
-      this.triggerError('Error al registrar usuario');
-    }
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 
-  triggerError(message: string) {
+  private showToast(message: string) {
     this.toastMessage = message;
     this.isToastOpen = true;
-    this.shakeInputs = true;
-    
-    setTimeout(() => this.shakeInputs = false, 500);
-    setTimeout(() => this.isToastOpen = false, 3000);
+    setTimeout(() => {
+      this.isToastOpen = false;
+    }, 3000);
   }
 
-  goToLogin() {
-    this.router.navigateByUrl('/login');
+  private triggerShake() {
+    this.shakeInputs = true;
+    setTimeout(() => {
+      this.shakeInputs = false;
+    }, 500);
   }
 }

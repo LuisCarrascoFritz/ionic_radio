@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/main/home']">
+        <ion-icon slot="start" name="chevron-back"></ion-icon>
+        Atrás
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="usuario" class="profile-container">
+    <!-- Avatar Section -->
+    <div class="avatar-section">
+      <div class="avatar-wrapper" (click)="cambiarFoto()">
+        <div class="profile-avatar">
+          <img *ngIf="fotoPerfilUrl" [src]="fotoPerfilUrl" alt="Avatar" />
+          <ion-icon *ngIf="!fotoPerfilUrl" name="person" class="avatar-icon"></ion-icon>
+        </div>
+        <div class="edit-badge">
+          <ion-icon name="camera"></ion-icon>
+        </div>
+      </div>
+      
+      <h2 class="username">{{ usuario.username }}</h2>
+      <p class="email">{{ usuario.email }}</p>
+    </div>
+
+    <!-- Menu List -->
+    <ion-list class="profile-list">
+      <ion-item button detail="true" lines="full">
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-label>Mi Cuenta</ion-label>
+      </ion-item>
+      
+      <ion-item button detail="true" lines="full">
+        <ion-icon slot="start" name="notifications-outline"></ion-icon>
+        <ion-label>Notificaciones</ion-label>
+      </ion-item>
+      
+      <ion-item button detail="true" lines="full">
+        <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+        <ion-label>Privacidad y Seguridad</ion-label>
+      </ion-item>
+
+      <ion-item button detail="true" lines="full" *ngIf="usuario.created_at">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>
+          <h3>Miembro desde</h3>
+          <p>{{ usuario.created_at | date:'dd/MM/yyyy' }}</p>
+        </ion-label>
+      </ion-item>
+      
+      <ion-item button detail="true" lines="none" class="logout-item" (click)="cerrarSesion()">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        <ion-label>Cerrar Sesión</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="!usuario" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Cargando información del usuario...</p>
+  </div>
+
+  <!-- Input oculto para subir fotos -->
+  <input type="file" #fileInput accept="image/*" style="display: none;" (change)="onFileSelected($event)">
+</ion-content>

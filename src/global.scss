@@ -36,6 +36,48 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+:root {
+  --app-bg: #000000;
+  --app-card-bg: #1c1c1e;
+  --app-text-primary: #ffffff;
+  --app-text-secondary: #8e8e93;
+  --app-accent: #fa233b;
+  --app-accent-gradient: linear-gradient(135deg, #fa233b 0%, #ff5e3a 100%);
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+
+ion-content {
+  --background: var(--app-bg);
+  --color: var(--app-text-primary);
+}
+
+ion-header ion-toolbar {
+  --background: rgba(28, 28, 30, 0.85);
+  --border-style: none;
+}
+
+ion-title {
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--app-text-primary);
+}
+
+ion-tab-bar {
+  --background: rgba(20, 20, 20, 0.95);
+  --border: none;
+  height: 60px;
+  border-top: 0.5px solid #333;
+}
+
+ion-tab-button {
+  --color: #666;
+  --color-selected: var(--app-accent);
+}
+
 app-register,
 app-recoverpasword {
   display: block;
